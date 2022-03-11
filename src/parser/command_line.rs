@@ -1,12 +1,12 @@
 use std::env;
 
-pub struct Command {
+pub struct CommandLine {
   args: Vec<String>,
   options: Vec<String>,
 }
 
-impl Command {
-  pub fn new() -> Command {
+impl CommandLine {
+  pub fn new() -> CommandLine {
     let args:Vec<String> = env::args().collect();
     let options = args.iter().filter(|arg| arg.starts_with("-"))
       .map(|arg| arg.to_string())
@@ -15,7 +15,7 @@ impl Command {
       .map(|arg| arg.to_string())
       .collect();
 
-    Command {
+    CommandLine {
       args: args,
       options: options,
     }
