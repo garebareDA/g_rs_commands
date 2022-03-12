@@ -1,4 +1,4 @@
-use super::ls_file::File;
+use crate::file::file::File;
 use crate::parser::command_line;
 use crate::parser::commands;
 use colored::*;
@@ -30,7 +30,7 @@ impl LsCommands {
       file.get_user(),
       file.get_group(),
       file.get_size(),
-      file.get_modification_time_string(),
+      file.get_modification_time(),
       if file.is_dir() {
         file.get_name().blue()
       } else {
@@ -53,7 +53,7 @@ impl commands::Commands for LsCommands {
     "ls"
   }
 
-  fn run(&self) {
+  fn run(&self) -> Result<(), String> {
     let command = &self.command_line;
     let args = command.get_args();
     let options = command.get_options();
@@ -63,25 +63,24 @@ impl commands::Commands for LsCommands {
     if args.len() != 1 && args.len() != 0 {
       println!("ls: missing operand");
       println!("Try 'ls --help' for more information.");
-      return;
+      return Ok(());
     }
 
     if args.len() == 1 {
       if self.print_help(options, &args[0]) {
-        return;
+        return Ok(());
       };
 
       if self.print_version(options, &args[0]) {
-        return;
+        return Ok(());
       };
     }
 
-    let dir: Vec<File>;
+    let mut dir: Vec<File>;
     if args.len() == 0 {
-      dir = self.read_dir("./");
+      dir = self.read_dir("./")?;
     } else {
-      //TODO ファイルが存在しない場合のエラーを書く
-      dir = self.read_dir(&args[0]);
+      dir = self.read_dir(&args[0])?;
     }
 
     for option in options {
@@ -105,5 +104,7 @@ impl commands::Commands for LsCommands {
         self.print_file_name(&file);
       }
     }
+
+    return Ok(());
   }
 }
