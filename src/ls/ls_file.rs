@@ -1,4 +1,6 @@
 use super::ls_commands::LsCommands;
+use chrono::offset::Utc;
+use chrono::DateTime;
 use std::os::unix::prelude::MetadataExt;
 use std::path::Path;
 use std::time::SystemTime;
@@ -94,10 +96,8 @@ impl File {
   }
 
   pub fn get_modification_time_string(&self) -> String {
-    return format!(
-      "{}",
-      self.get_modification_time().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_secs()
-    );
+    let date_time: DateTime<Utc> = self.get_modification_time().into();
+    return format!("{}", date_time.format("%d/%m/%Y %T"));
   }
 
   fn get_permission_string(&self) -> String {

@@ -1,5 +1,6 @@
 use crate::parser::command_line;
 use crate::parser::commands;
+use super::ls_file::File;
 
 pub struct LsCommands {
   command_line: command_line::CommandLine,
@@ -47,11 +48,13 @@ impl commands::Commands for LsCommands {
       };
     }
 
+    let dir:Vec<File>;
     if args.len() == 0 {
-      self.read_dir("./");
+      dir = self.read_dir("./");
     } else {
-      self.read_dir(&args[0]);
+      dir = self.read_dir(&args[0]);
     }
-    //TODO read_dirからファイルの情報を受け取って選別する
+
+    println!("{}", dir[0].get_modification_time_string());
   }
 }
