@@ -1,6 +1,7 @@
+use super::ls_file::File;
 use crate::parser::command_line;
 use crate::parser::commands;
-use super::ls_file::File;
+use colored::*;
 
 pub struct LsCommands {
   command_line: command_line::CommandLine,
@@ -11,6 +12,27 @@ impl LsCommands {
     LsCommands {
       command_line: command_line::CommandLine::new(),
     }
+  }
+
+  fn print_file_name(&self, file: &File) {
+    if file.is_dir() {
+      println!("{}  ", file.get_name().blue());
+    } else {
+      println!("{}  ", file.get_name());
+    }
+  }
+
+  fn print_file_details(&self, file: &File) {
+    println!(
+      "{} {} {} {} {} {} {}",
+      file.get_permission_string(),
+      file.get_hard_link_count(),
+      file.get_user(),
+      file.get_group(),
+      file.get_byte_size(),
+      file.get_modification_time_string(),
+      file.get_name(),
+    );
   }
 }
 
@@ -31,6 +53,8 @@ impl commands::Commands for LsCommands {
     let command = &self.command_line;
     let args = command.get_args();
     let options = command.get_options();
+    let mut is_show_hidden = false;
+    let mut is_show_details = false;
 
     if args.len() != 1 && args.len() != 0 {
       println!("ls: missing operand");
@@ -48,13 +72,34 @@ impl commands::Commands for LsCommands {
       };
     }
 
-    let dir:Vec<File>;
+    let dir: Vec<File>;
     if args.len() == 0 {
       dir = self.read_dir("./");
     } else {
+      //TODO ファイルが存在しない場合のエラーを書く
       dir = self.read_dir(&args[0]);
     }
 
-    println!("{}", dir[0].get_modification_time_string());
+    for option in options {
+      if option == "-a" {
+        is_show_hidden = true;
+      }
+
+      if option == "-l" {
+        is_show_details = true;
+      }
+    }
+
+    for file in dir {
+      if file.is_hidden() && !is_show_hidden {
+        continue;
+      }
+
+      if is_show_details {
+        self.print_file_details(&file);
+      } else {
+        self.print_file_name(&file);
+      }
+    }
   }
 }

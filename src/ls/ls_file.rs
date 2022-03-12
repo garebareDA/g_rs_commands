@@ -100,9 +100,15 @@ impl File {
     return format!("{}", date_time.format("%d/%m/%Y %T"));
   }
 
-  fn get_permission_string(&self) -> String {
+  pub fn get_permission_string(&self) -> String {
     let permission = self.get_permission();
     let mut permission_string = String::new();
+    if self.is_dir() {
+      permission_string.push('d');
+    } else {
+      permission_string.push('-');
+    }
+
     if permission & 0o400 != 0 {
       permission_string.push('r');
     } else {
