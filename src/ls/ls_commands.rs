@@ -31,19 +31,27 @@ impl commands::Commands for LsCommands {
     let args = command.get_args();
     let options = command.get_options();
 
-    if args.len() != 2 && args.len() != 1 {
+    if args.len() != 1 && args.len() != 0 {
       println!("ls: missing operand");
       println!("Try 'ls --help' for more information.");
       return;
     }
 
-    if self.print_help(options, &args[0]) { return; };
-    if self.print_version(options, &args[0]) { return; };
     if args.len() == 1 {
-      self.read_dir("./");
-    } else {
-      self.read_dir(&args[1]);
+      if self.print_help(options, &args[0]) {
+        return;
+      };
+
+      if self.print_version(options, &args[0]) {
+        return;
+      };
     }
 
+    if args.len() == 0 {
+      self.read_dir("./");
+    } else {
+      self.read_dir(&args[0]);
+    }
+    //TODO read_dirからファイルの情報を受け取って選別する
   }
 }
