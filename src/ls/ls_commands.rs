@@ -31,7 +31,7 @@ impl commands::Commands for LsCommands {
     let args = command.get_args();
     let options = command.get_options();
 
-    if args.len() != 1 && args.len() != 0 {
+    if args.len() != 2 && args.len() != 1 {
       println!("ls: missing operand");
       println!("Try 'ls --help' for more information.");
       return;
@@ -39,6 +39,11 @@ impl commands::Commands for LsCommands {
 
     if self.print_help(options, &args[0]) { return; };
     if self.print_version(options, &args[0]) { return; };
-    self.read_dir("./");
+    if args.len() == 1 {
+      self.read_dir("./");
+    } else {
+      self.read_dir(&args[1]);
+    }
+
   }
 }
