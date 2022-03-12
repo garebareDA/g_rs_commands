@@ -23,15 +23,20 @@ impl LsCommands {
   }
 
   fn print_file_details(&self, file: &File) {
+    let mut file_name = file.get_name();
     println!(
-      "{} {} {} {} {} {} {}",
+      "{0} {1: >2} {2: >8} {3: >8} {4: >4} {5} {6}",
       file.get_permission_string(),
       file.get_hard_link_count(),
       file.get_user(),
       file.get_group(),
-      file.get_byte_size(),
+      file.get_size(),
       file.get_modification_time_string(),
-      file.get_name(),
+      if file.is_dir() {
+        file.get_name().blue()
+      } else {
+        file.get_name().white()
+      },
     );
   }
 }
