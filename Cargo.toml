@@ -10,5 +10,5 @@ users = "0.11"
 
 
 [[bin]]
-name = "ls"
-path = "bin/ls.rs"
+name = "gls"
+path = "bin/gls.rs"
