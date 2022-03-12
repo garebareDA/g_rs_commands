@@ -23,7 +23,6 @@ impl LsCommands {
   }
 
   fn print_file_details(&self, file: &File) {
-    let mut file_name = file.get_name();
     println!(
       "{0} {1: >2} {2: >8} {3: >8} {4: >4} {5} {6}",
       file.get_permission_string(),
