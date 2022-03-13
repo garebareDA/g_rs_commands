@@ -19,9 +19,9 @@ impl File {
   }
 
   pub fn get_name (&self) -> &str {
-    match self.name.into_string() {
-      Ok(s) => s.as_str(),
-      Err(_) => "<unknown>",
+    match self.name.to_str() {
+      Some(name) => name,
+      None => "<unknown>",
     }
   }
 

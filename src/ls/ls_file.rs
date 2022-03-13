@@ -10,7 +10,7 @@ use crate::file::file::File;
 use crate::file::meta::Meta;
 
 impl LsCommands {
-  pub(crate) fn read_dir<P: AsRef<Path>>(&self, path: P) -> Result<Vec<File>, String> {
+  pub(crate) fn read_dir<P: AsRef<Path> + Copy> (&self, path: P) -> Result<Vec<File>, String> {
     let files = fs::read_dir(path)
       .ok()
       .ok_or(format!(

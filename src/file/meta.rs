@@ -35,6 +35,10 @@ impl Meta {
     }
   }
 
+  pub fn get_hard_link_count(&self) -> u64 {
+    self.hard_link_count
+  }
+
   pub fn get_user(&self) -> &str {
     match self.user {
       Some(ref user) => {
@@ -84,13 +88,14 @@ impl Meta {
     return self.permission;
   }
 
-  pub fn get_modification_time(&self) -> &str {
+  pub fn get_modification_time(&self) -> String {
     match self.modification_time {
       Some(time) => {
         let date_time:DateTime<Utc> = time.into();
-        return date_time.format("%Y-%m-%d %H:%M:%S").to_string().as_str();
+        let formatted = date_time.format("%Y-%m-%d %H:%M:%S").to_string();
+        return formatted;
       },
-      None => "<unknown>",
+      None => "<unknown>".to_string(),
     }
   }
 

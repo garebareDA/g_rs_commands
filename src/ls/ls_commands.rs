@@ -15,28 +15,44 @@ impl LsCommands {
   }
 
   fn print_file_name(&self, file: &File) {
-    if file.is_dir() {
-      println!("{}  ", file.get_name().blue());
-    } else {
-      println!("{}  ", file.get_name());
+    let name = file.get_name();
+    if file.get_meta().is_some() {
+      let meta = file.get_meta().unwrap();
+      if meta.is_dir() {
+        println!("{}", name.green());
+        return;
+      }
     }
+    println!("{}", name.white());
   }
 
   fn print_file_details(&self, file: &File) {
-    println!(
-      "{0} {1: >2} {2: >8} {3: >8} {4: >4} {5} {6}",
-      file.get_permission_string(),
-      file.get_hard_link_count(),
-      file.get_user(),
-      file.get_group(),
-      file.get_size(),
-      file.get_modification_time(),
-      if file.is_dir() {
-        file.get_name().blue()
-      } else {
-        file.get_name().white()
-      },
-    );
+    let meta = file.get_meta();
+    let name = file.get_name();
+    let mut name_color = name.white();
+    if meta.is_some() {
+      let meta = meta.unwrap();
+      let user = meta.get_user();
+      let group = meta.get_group();
+      let permission = meta.get_permission_string();
+      let data_time = meta.get_modification_time();
+      let hard_link = meta.get_hard_link_count();
+      let byte_size = meta.get_size();
+      if meta.is_dir() {
+        name_color = name.blue();
+      }
+      println!("{0} {1: >8} {2: >8} {3: >8} {4: >8} {5} {6: <8}",
+        permission,
+        hard_link,
+        user,
+        group,
+        byte_size,
+        data_time,
+        &name_color,
+      );
+    } else {
+      println!("{}", name_color);
+    }
   }
 }
 
@@ -76,7 +92,7 @@ impl commands::Commands for LsCommands {
       };
     }
 
-    let mut dir: Vec<File>;
+    let dir: Vec<File>;
     if args.len() == 0 {
       dir = self.read_dir("./")?;
     } else {
@@ -94,8 +110,8 @@ impl commands::Commands for LsCommands {
     }
 
     for file in dir {
-      if file.is_hidden() && !is_show_hidden {
-        continue;
+      if file.get_name().starts_with(".") && !is_show_hidden {
+          continue;
       }
 
       if is_show_details {
