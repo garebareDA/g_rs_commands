@@ -11,7 +11,7 @@ pub struct Meta {
   modification_time: Option<SystemTime>,
   hard_link_count: u64,
   byte_size: u64,
-  fileType: Option<FileType>,
+  file_type: Option<FileType>,
 }
 
 impl Meta {
@@ -22,7 +22,7 @@ impl Meta {
     modification_time: Option<SystemTime>,
     hard_link_count: u64,
     byte_size: u64,
-    fileType: Option<FileType>,
+    file_type: Option<FileType>,
   ) -> Meta {
     Meta {
       group,
@@ -31,7 +31,7 @@ impl Meta {
       modification_time,
       hard_link_count,
       byte_size,
-      fileType,
+      file_type,
     }
   }
 
@@ -58,7 +58,7 @@ impl Meta {
   }
 
   pub fn is_dir(&self) -> bool {
-    match self.fileType {
+    match self.file_type {
       Some(t) => {
         t.is_dir()
       },
