@@ -41,14 +41,26 @@ impl LsCommands {
       if meta.is_dir() {
         name_color = name.blue();
       }
-      println!("{0} {1: >8} {2: >8} {3: >8} {4: >8} {5} {6: <8}",
+
+      let symlink = match meta.get_sym_link() {
+        Some(s) => format!(" -> {}", s),
+        None => "".to_string(),
+      };
+      let symlink_color = if meta.is_symlink_dir() {
+        symlink.blue()
+      } else {
+        symlink.white()
+      };
+
+      println!("{0} {1: >8} {2: >8} {3: >8} {4: >8} {5} {6: <8} {7: <8}",
         permission,
         hard_link,
         user,
         group,
         byte_size,
         data_time,
-        &name_color,
+        name_color,
+        symlink_color,
       );
     } else {
       println!("{}", name_color);

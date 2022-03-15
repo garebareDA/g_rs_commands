@@ -1,7 +1,7 @@
-use std::{time::SystemTime, path::PathBuf};
-use users::Group;
+use chrono::{DateTime, Utc};
 use std::fs::FileType;
-use chrono::{Utc, DateTime};
+use std::{path::PathBuf, time::SystemTime};
+use users::Group;
 
 #[derive(Debug)]
 pub struct Meta {
@@ -46,7 +46,7 @@ impl Meta {
     match self.user {
       Some(ref user) => {
         return user.name().to_str().unwrap_or("<unknown>");
-      },
+      }
       None => "<unknown>",
     }
   }
@@ -55,16 +55,14 @@ impl Meta {
     match self.group {
       Some(ref group) => {
         return group.name().to_str().unwrap_or("<unknown>");
-      },
+      }
       None => "<unknown>",
     }
   }
 
   pub fn is_dir(&self) -> bool {
     match self.file_type {
-      Some(t) => {
-        t.is_dir()
-      },
+      Some(t) => t.is_dir(),
       _ => false,
     }
   }
@@ -94,10 +92,10 @@ impl Meta {
   pub fn get_modification_time(&self) -> String {
     match self.modification_time {
       Some(time) => {
-        let date_time:DateTime<Utc> = time.into();
+        let date_time: DateTime<Utc> = time.into();
         let formatted = date_time.format("%Y-%m-%d %H:%M:%S").to_string();
         return formatted;
-      },
+      }
       None => "<unknown>".to_string(),
     }
   }
@@ -162,5 +160,21 @@ impl Meta {
     }
 
     return permission_string;
+  }
+
+  pub fn get_sym_link(&self) -> Option<&str> {
+    match self.sym_link {
+      Some(ref path) => {
+        path.to_str()
+      },
+      None => (None),
+    }
+  }
+
+  pub fn is_symlink_dir(&self) -> bool {
+    match &self.sym_link {
+      Some(t) => t.is_dir(),
+      _ => false,
+    }
   }
 }
