@@ -78,7 +78,7 @@ impl commands::Commands for LsCommands {
   }
 
   fn name(&self) -> &str {
-    "ls"
+    "gls"
   }
 
   fn run(&self) -> Result<(), String> {
@@ -87,6 +87,7 @@ impl commands::Commands for LsCommands {
     let options = command.get_options();
     let mut is_show_hidden = false;
     let mut is_show_details = false;
+    let mut is_show_reverso = false;
 
     if args.len() != 1 && args.len() != 0 {
       println!("ls: missing operand");
@@ -104,7 +105,7 @@ impl commands::Commands for LsCommands {
       };
     }
 
-    let dir: Vec<File>;
+    let mut dir: Vec<File>;
     if args.len() == 0 {
       dir = self.read_dir("./")?;
     } else {
@@ -118,6 +119,14 @@ impl commands::Commands for LsCommands {
 
       if option == "-l" {
         is_show_details = true;
+      }
+
+      if option == "-R" {
+        is_show_reverso = true;
+      }
+
+      if option == "-r" {
+        dir.reverse();
       }
     }
 
