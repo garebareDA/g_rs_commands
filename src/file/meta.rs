@@ -1,4 +1,4 @@
-use std::time::SystemTime;
+use std::{time::SystemTime, path::PathBuf};
 use users::Group;
 use std::fs::FileType;
 use chrono::{Utc, DateTime};
@@ -12,6 +12,7 @@ pub struct Meta {
   hard_link_count: u64,
   byte_size: u64,
   file_type: Option<FileType>,
+  sym_link: Option<PathBuf>,
 }
 
 impl Meta {
@@ -23,6 +24,7 @@ impl Meta {
     hard_link_count: u64,
     byte_size: u64,
     file_type: Option<FileType>,
+    sym_link: Option<PathBuf>,
   ) -> Meta {
     Meta {
       group,
@@ -32,6 +34,7 @@ impl Meta {
       hard_link_count,
       byte_size,
       file_type,
+      sym_link,
     }
   }
 

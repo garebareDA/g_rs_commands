@@ -38,6 +38,11 @@ impl LsCommands {
       let hard_link = metadata.nlink();
       let byte_size = metadata.len();
       let file_type = entry.file_type().ok();
+      let symlink = if metadata.is_symlink() {
+        entry.path().read_link().ok()
+      } else {
+        None
+      };
       let meta = Meta::new(
         group,
         user,
@@ -46,6 +51,7 @@ impl LsCommands {
         hard_link,
         byte_size,
         file_type,
+        symlink
       );
 
       return Ok(File::new(
