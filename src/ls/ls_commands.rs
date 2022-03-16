@@ -66,6 +66,19 @@ impl LsCommands {
       println!("{}", name_color);
     }
   }
+
+  fn show_reverso (&self, file:&File) {
+    if file.get_meta().is_some() != true {
+      return;
+    }
+    let name = file.get_name();
+    let dirs = self.read_dir(name);
+    println!("{:?}", dirs);
+  }
+
+  fn its_show_time (&self) {
+    println!("{}", "its show time by tafumi");
+  }
 }
 
 impl commands::Commands for LsCommands {
@@ -103,6 +116,11 @@ impl commands::Commands for LsCommands {
       if self.print_version(options, &args[0]) {
         return Ok(());
       };
+
+      if args[0] == "its_show_time" {
+        self.its_show_time();
+        return Ok(());
+      }
     }
 
     let mut dir: Vec<File>;
@@ -130,7 +148,8 @@ impl commands::Commands for LsCommands {
       }
     }
 
-    for file in dir {
+    let mut dirs:Vec<&File> = Vec::new();
+    for file in dir.iter() {
       if file.get_name().starts_with(".") && !is_show_hidden {
           continue;
       }
@@ -140,6 +159,17 @@ impl commands::Commands for LsCommands {
       } else {
         self.print_file_name(&file);
       }
+
+      if is_show_reverso && file.get_meta().is_some() {
+        let meta = file.get_meta().unwrap();
+        if meta.is_dir() {
+          dirs.push(file);
+        }
+      }
+    }
+
+    if is_show_reverso {
+      self.show_reverso(&dirs[0]);
     }
 
     return Ok(());
