@@ -131,7 +131,13 @@ impl LsCommands {
 
 impl commands::Commands for LsCommands {
   fn help(&self) {
-    println!("help");
+    println!("Usage: ls [OPTION]... [FILE]...");
+    println!("List information about the FILEs.");
+    println!("");
+    println!("  -a,  do not ignore entries starting with .");
+    println!("  -l,  print in long format");
+    println!("  -R,  list subdirectories recursively");
+    println!("  -r,  reverse order while sorting");
   }
 
   fn version(&self) {
