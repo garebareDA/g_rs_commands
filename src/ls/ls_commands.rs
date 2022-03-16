@@ -52,31 +52,36 @@ impl LsCommands {
         symlink.white()
       };
 
-      println!("{0} {1: >8} {2: >8} {3: >8} {4: >8} {5} {6: <8} {7: <8}",
-        permission,
-        hard_link,
-        user,
-        group,
-        byte_size,
-        data_time,
-        name_color,
-        symlink_color,
+      println!(
+        "{0} {1: >8} {2: >8} {3: >8} {4: >8} {5} {6: <8} {7: <8}",
+        permission, hard_link, user, group, byte_size, data_time, name_color, symlink_color,
       );
     } else {
       println!("{}", name_color);
     }
   }
 
-  fn show_reverso (&self, file:&File) {
-    if file.get_meta().is_some() != true {
-      return;
+  fn show_reverso(&self, file: Vec<&File>, path:&str) -> Result<(), String> {
+    for f in file {
+      if f.get_meta().is_some() == false {
+        continue;
+      }
+      let mut files :Vec<&File> = Vec::new();
+      let name = f.get_name();
+      let dirs = self.read_dir(&format!("{}/{}", path, &name))?;
+      for dir in dirs.iter() {
+        let dir_meta = dir.get_meta().unwrap();
+        self.print_file_name(dir);
+        if dir_meta.is_dir() {
+          files.push(dir);
+        }
+      }
+      self.show_reverso(files, &format!("{}/{}", path, &name))?;
     }
-    let name = file.get_name();
-    let dirs = self.read_dir(name);
-    println!("{:?}", dirs);
+    Ok(())
   }
 
-  fn its_show_time (&self) {
+  fn its_show_time(&self) {
     println!("{}", "its show time by tafumi");
   }
 }
@@ -148,10 +153,10 @@ impl commands::Commands for LsCommands {
       }
     }
 
-    let mut dirs:Vec<&File> = Vec::new();
+    let mut dirs: Vec<&File> = Vec::new();
     for file in dir.iter() {
       if file.get_name().starts_with(".") && !is_show_hidden {
-          continue;
+        continue;
       }
 
       if is_show_details {
@@ -169,7 +174,7 @@ impl commands::Commands for LsCommands {
     }
 
     if is_show_reverso {
-      self.show_reverso(&dirs[0]);
+      self.show_reverso(dirs, "./")?;
     }
 
     return Ok(());

@@ -4,5 +4,8 @@ use g_rs_commands::parser::commands::Commands;
 
 fn main () {
   let ls_commands = ls::ls_commands::LsCommands::new();
-  ls_commands.run();
+  match ls_commands.run() {
+    Ok(_) => {},
+    Err(e) => println!("{}", e),
+  }
 }
