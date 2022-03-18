@@ -1,5 +1,6 @@
 use crate::file::file::File;
 use crate::parser::command_line;
+use crate::parser::command_line::CommandLine;
 use crate::parser::commands;
 use colored::*;
 
@@ -12,9 +13,9 @@ pub struct LsCommands {
 }
 
 impl LsCommands {
-  pub fn new() -> LsCommands {
+  pub fn new(command_line:CommandLine) -> LsCommands {
     let mut command = LsCommands {
-      command_line: command_line::CommandLine::new(),
+      command_line: command_line,
       is_show_hidden: false,
       is_show_details: false,
       is_show_reverso: false,
@@ -124,6 +125,22 @@ impl LsCommands {
     Ok(())
   }
 
+  pub(crate) fn get_is_show_hidden(&self) -> bool {
+    return self.is_show_hidden;
+  }
+
+  pub(crate) fn get_is_show_details(&self) -> bool {
+    return self.is_show_details;
+  }
+
+  pub(crate) fn get_is_show_reverso(&self) -> bool {
+    return self.is_show_reverso;
+  }
+
+  pub(crate) fn get_is_reverse(&self) -> bool {
+    return self.is_reverse;
+  }
+
   fn its_show_time(&self) {
     println!("{}", "its show time by tafumi");
   }
@@ -155,7 +172,7 @@ impl commands::Commands for LsCommands {
 
     if args.len() != 1 && args.len() != 0 {
       println!("ls: missing operand");
-      println!("Try 'ls --help' for more information.");
+      println!("Try 'gls --help' for more information.");
       return Ok(());
     }
 
