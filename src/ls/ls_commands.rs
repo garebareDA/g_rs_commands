@@ -1,11 +1,10 @@
 use crate::file::file::File;
-use crate::parser::command_line;
 use crate::parser::command_line::CommandLine;
 use crate::parser::commands;
 use colored::*;
 
 pub struct LsCommands {
-  command_line: command_line::CommandLine,
+  command_line: CommandLine,
   is_show_hidden: bool,
   is_show_details: bool,
   is_show_reverso: bool,
