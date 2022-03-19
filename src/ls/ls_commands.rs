@@ -124,19 +124,19 @@ impl LsCommands {
     Ok(())
   }
 
-  pub(crate) fn get_is_show_hidden(&self) -> bool {
+  pub fn get_is_show_hidden(&self) -> bool {
     return self.is_show_hidden;
   }
 
-  pub(crate) fn get_is_show_details(&self) -> bool {
+  pub fn get_is_show_details(&self) -> bool {
     return self.is_show_details;
   }
 
-  pub(crate) fn get_is_show_reverso(&self) -> bool {
+  pub fn get_is_show_reverso(&self) -> bool {
     return self.is_show_reverso;
   }
 
-  pub(crate) fn get_is_reverse(&self) -> bool {
+  pub fn get_is_reverse(&self) -> bool {
     return self.is_reverse;
   }
 

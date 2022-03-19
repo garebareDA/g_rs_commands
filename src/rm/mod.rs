@@ -7,7 +7,6 @@ pub mod tests {
   use crate::parser::commands::Commands;
   use crate::parser::command_line::CommandLine;
   use crate::rm::rm_commands::RmCommands;
-  use std::io::{self, BufRead, Write};
   use std::fs;
   use std::fs::File;
   use std::path::Path;
