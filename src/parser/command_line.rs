@@ -28,11 +28,23 @@ impl CommandLine {
     &self.args
   }
 
+  pub fn set_args(&mut self, args: Vec<String>) {
+    self.args = args;
+  }
+
   pub fn get_options(&self) -> &Vec<String> {
     &self.options
   }
 
+  pub fn set_options(&mut self, options: Vec<String>) {
+    self.options = options;
+  }
+
   pub fn get_name(&self) -> &str {
     &self.command
+  }
+
+  pub fn set_name(&mut self, name: &str) {
+    self.command = name.into();
   }
 }

@@ -14,3 +14,7 @@ colored = "2"
 [[bin]]
 name = "gls"
 path = "bin/gls.rs"
+
+[[bin]]
+name = "grm"
+path = "bin/grm.rs"
