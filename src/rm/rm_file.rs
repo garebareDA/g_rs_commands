@@ -22,7 +22,10 @@ impl RmCommands {
       }
     }
 
-    return Err("grm: cannot remove '{}' : No such a file or directory".to_string());
+    return Err(format!(
+      "grm: cannot remove {} : No such a file or directory",
+      path.display()
+    ));
   }
 
   pub fn remove_reverso<P: AsRef<Path>>(&self, path: P) -> Result<(), String> {
@@ -30,25 +33,37 @@ impl RmCommands {
     if path.exists() {
       if path.is_dir() {
         self.remove_visit_dir(path)?;
+        self.remove_file(path)?;
+        return Ok(());
       } else {
-        return Err("grm -r: cannot remove '{}' : No directory".to_string());
+        return Err(format!(
+          "grm: cannot remove {} : No directory",
+          path.display()
+        ));
       }
     }
-    return Err("grm: cannot remove '{}' : No such a file or directory".to_string());
+    return Err(format!(
+      "grm: cannot remove {} : No such a file or directory",
+      path.display()
+    ));
   }
 
-  fn remove_visit_dir<P: AsRef<Path>>(&self, path: P) -> Result<(), String> {
-    for entry in std::fs::read_dir(path).unwrap() {
-      let entry = entry
-        .ok()
-        .ok_or("grm: cannot remove '{}' : No such a file or directory".to_string())?;
+  fn remove_visit_dir<P: AsRef<Path> + Copy>(&self, path: P) -> Result<(), String> {
+    for entry in std::fs::read_dir(path).ok().ok_or(format!(
+      "grm: cannot remove {} : No such a file or directory",
+      path.as_ref().display()
+    ))? {
+      println!("a{}", path.as_ref().display());
+      let entry = entry.ok().ok_or(format!(
+        "grm: cannot remove {} : No such a file or directory",
+        path.as_ref().display()
+      ))?;
       let path = entry.path();
+      println!("b{}", path.display());
       if path.is_dir() {
         self.remove_visit_dir(&path)?;
-        self.remove_file(&path)?;
-      } else {
-        self.remove_file(&path)?;
       }
+      self.remove_file(&path)?;
     }
     return Ok(());
   }
