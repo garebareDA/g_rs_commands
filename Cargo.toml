@@ -18,3 +18,7 @@ path = "bin/gls.rs"
 [[bin]]
 name = "grm"
 path = "bin/grm.rs"
+
+[[bin]]
+name = "gwhich"
+path = "bin/gwhich.rs"
