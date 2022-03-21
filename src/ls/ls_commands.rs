@@ -147,7 +147,7 @@ impl LsCommands {
 
 impl commands::Commands for LsCommands {
   fn help(&self) {
-    println!("Usage: ls [OPTION]... [FILE]...");
+    println!("Usage: gls [OPTION]... [FILE]...");
     println!("List information about the FILEs.");
     println!("");
     println!("  -a,  do not ignore entries starting with .");
