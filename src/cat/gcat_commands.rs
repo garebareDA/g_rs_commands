@@ -35,17 +35,22 @@ impl commands::Commands for CatCommands {
     let command = &self.command_line;
     let args = command.get_args();
     let options = command.get_options();
+    if args.len() < 1 {
+      println!("gcat: missing operand");
+      println!("Try 'gcat --help' for more information.");
+      return Ok(());
+    }
 
     if args.len() == 1 {
-      if self.print_help(options, args[0]) {
+      if self.print_help(options, &args[0]) {
         return Ok(());
       }
 
-      if self.print_version(options, args[0]) {
+      if self.print_version(options, &args[0]) {
         return Ok(());
       }
     }
-
-    return Ok;
+    self.print_files(&args)?;
+    return Ok(());
   }
 }
