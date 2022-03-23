@@ -21,22 +21,13 @@ impl LsCommands {
       is_reverse: false,
     };
 
-    let options = command.command_line.get_options();
-    for option in options.iter() {
-      if option == "-a" {
-        command.is_show_hidden = true;
-      }
-
-      if option == "-l" {
-        command.is_show_details = true;
-      }
-
-      if option == "-R" {
-        command.is_show_reverso = true;
-      }
-
-      if option == "-r" {
-        command.is_reverse = true;
+    for flag in command.command_line.get_options().iter() {
+      match flag.as_str() {
+        "-a" => command.is_show_hidden = true,
+        "-l" => command.is_show_details = true,
+        "-R" => command.is_show_reverso = true,
+        "-r" => command.is_reverse = true,
+        _ => (),
       }
     }
 
@@ -147,7 +138,7 @@ impl LsCommands {
 
 impl commands::Commands for LsCommands {
   fn help(&self) {
-    println!("Usage: ls [OPTION]... [FILE]...");
+    println!("Usage: gls [OPTION]... [FILE]...");
     println!("List information about the FILEs.");
     println!("");
     println!("  -a,  do not ignore entries starting with .");

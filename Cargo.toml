@@ -22,3 +22,7 @@ path = "bin/grm.rs"
 [[bin]]
 name = "gwhich"
 path = "bin/gwhich.rs"
+
+[[bin]]
+name = "gcat"
+path = "bin/gcat.rs"
