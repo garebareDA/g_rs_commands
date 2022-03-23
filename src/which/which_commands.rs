@@ -13,10 +13,10 @@ impl WhichCommands {
       is_all: false,
     };
 
-    let options = command.command_line.get_options();
-    for option in options.iter() {
-      if option == "-a" {
-        command.is_all = true;
+    for flag in command.command_line.get_options().iter() {
+      match flag.as_str() {
+        "-a" => command.is_all = true,
+        _ => (),
       }
     }
 

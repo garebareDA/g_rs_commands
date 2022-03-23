@@ -3,11 +3,27 @@ use crate::parser::commands;
 
 pub struct CatCommands {
   command_line: CommandLine,
+  show_end: bool,
+  show_number: bool,
 }
 
 impl CatCommands {
   pub fn new(command_line: CommandLine) -> CatCommands {
-    return CatCommands { command_line: command_line };
+    let mut command = CatCommands {
+      command_line,
+      show_end: false,
+      show_number: false,
+    };
+
+    for flag in command.command_line.get_options().iter() {
+      match flag.as_str() {
+        "-n" => command.show_number = true,
+        "-e" => command.show_end = true,
+        _ => (),
+      }
+    }
+
+    return command;
   }
 }
 impl commands::Commands for CatCommands {
@@ -17,10 +33,10 @@ impl commands::Commands for CatCommands {
     println!("");
     println!("Concatenate FILE(s), or standard input, to standard output.");
     println!("");
-    println!("  -A, --show-all           equivalent to -vET");
-    println!("  -b, --number-nonblank    number nonempty output lines, overrides -n");
+    println!("  -e,   display $ at end of each line");
+    println!("  -n,   number nonempty output lines, overrides -n");
     println!("  -h, --help               display this help and exit");
-    println!("  -V, --version            output version information and exit");
+    println!("  -v, --version            output version information and exit");
   }
 
   fn version(&self) {
