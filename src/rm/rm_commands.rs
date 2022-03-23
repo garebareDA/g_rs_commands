@@ -19,6 +19,7 @@ impl RmCommands {
       match flag.as_str() {
         "-r" => command.is_reverso = true,
         "-i" => command.is_interactive = true,
+        
         _ => (),
       }
     }

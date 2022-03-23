@@ -5,6 +5,7 @@ pub struct CatCommands {
   command_line: CommandLine,
   show_end: bool,
   show_number: bool,
+  hide_blank: bool,
 }
 
 impl CatCommands {
@@ -13,17 +14,31 @@ impl CatCommands {
       command_line,
       show_end: false,
       show_number: false,
+      hide_blank: false,
     };
 
     for flag in command.command_line.get_options().iter() {
       match flag.as_str() {
         "-n" => command.show_number = true,
         "-e" => command.show_end = true,
+        "-b" => command.hide_blank = true,
         _ => (),
       }
     }
 
     return command;
+  }
+
+  pub(crate) fn get_show_end(&self) -> bool {
+    self.show_end
+  }
+
+  pub(crate) fn get_show_number(&self) -> bool {
+    self.show_number
+  }
+
+  pub(crate) fn get_hide_blank(&self) -> bool {
+    self.hide_blank
   }
 }
 impl commands::Commands for CatCommands {
@@ -34,7 +49,8 @@ impl commands::Commands for CatCommands {
     println!("Concatenate FILE(s), or standard input, to standard output.");
     println!("");
     println!("  -e,   display $ at end of each line");
-    println!("  -n,   number nonempty output lines, overrides -n");
+    println!("  -n,   number all output lines");
+    println!("  -b,   number nonempty output lines, overrides -n");
     println!("  -h, --help               display this help and exit");
     println!("  -v, --version            output version information and exit");
   }
