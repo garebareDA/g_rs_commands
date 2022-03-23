@@ -1,5 +1,5 @@
 use std::{fs, path::Path};
-use chrono::{DateTime, Utc};
+use chrono::{DateTime};
 
 use super::touch_commands;
 use filetime::{set_file_times, FileTime};
