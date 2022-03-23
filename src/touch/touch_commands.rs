@@ -5,6 +5,8 @@ pub struct TouchCommands {
     command_line: CommandLine,
     acsesss_time_update: bool,
     modification_time_udpate: bool,
+    is_date_time: bool,
+    reference_time: bool,
 }
 
 impl TouchCommands {
@@ -13,12 +15,16 @@ impl TouchCommands {
             command_line: command_line,
             acsesss_time_update : false,
             modification_time_udpate: false,
+            is_date_time: false,
+            reference_time: false,
         };
 
         for flag in command.command_line.get_options().iter() {
             match flag.as_str() {
                 "-a" => command.acsesss_time_update = true,
                 "-m" => command.modification_time_udpate = true,
+                "-d" => command.is_date_time = true,
+                "-r" => command.reference_time = true,
                 _ => (),
             }
         }
@@ -62,7 +68,12 @@ impl Commands for TouchCommands {
 
             self.timestamp_update(&args[0])?;
             return Ok(());
+        } else if args.len() == 2 && self.is_date_time {
+          self.set_file_timestamp(&args[1], &args[0])?;
+        } else if args.len() == 2 && self.reference_time {
+          self.reference_time(args.to_vec())?;
         }
+
         return Ok(());
     }
 }
