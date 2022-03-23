@@ -26,7 +26,7 @@ impl WhichCommands {
 
 impl commands::Commands for WhichCommands {
   fn help(&self) {
-    println!("Usage: witch [OPTION]... [STRING]...");
+    println!("Usage: gwitch [OPTION]... [STRING]...");
   }
 
   fn version(&self) {

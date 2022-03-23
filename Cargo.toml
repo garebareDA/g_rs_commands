@@ -9,6 +9,7 @@ edition = "2021"
 users = "0.11"
 chrono = "0.4"
 colored = "2"
+filetime = "0.2"
 
 
 [[bin]]
@@ -26,3 +27,7 @@ path = "bin/gwhich.rs"
 [[bin]]
 name = "gcat"
 path = "bin/gcat.rs"
+
+[[bin]]
+name = "gtouch"
+path = "bin/gtouch.rs"
