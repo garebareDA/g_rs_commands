@@ -5,3 +5,4 @@ pub mod rm;
 pub mod which;
 pub mod cat;
 pub mod touch;
+pub mod ps;
