@@ -5,15 +5,15 @@ use super::touch_commands;
 use filetime::{set_file_times, FileTime};
 impl touch_commands::TouchCommands {
     pub(crate) fn timestamp_update<P: AsRef<Path>>(&self, path: P) -> Result<(), String> {
-        if path.as_ref().exists() {
+         if path.as_ref().exists() {
             let (modified, accessed) = self.get_file_timestamp(&path)?;
-            let mtime = if self.get_modification_time_udpate() {
+            let mtime = if !self.get_modification_time_update() {
                 modified
             } else {
                 FileTime::now()
             };
 
-            let atime = if self.get_acsesss_time_update() {
+            let atime = if !self.get_access_time_update() {
                 accessed
             } else {
                 FileTime::now()

@@ -9,6 +9,7 @@ use crate::parser::commands::Commands;
   use crate::parser::command_line::CommandLine;
   use crate::touch::touch_commands::TouchCommands;
   use std::path::Path;
+  use std::thread;
   use std::fs;
 
   #[test]
@@ -37,6 +38,7 @@ use crate::parser::commands::Commands;
       Err(e) => panic!("{}", e),
     }
     assert!(Path::new("test.txt").exists());
+    thread::sleep(std::time::Duration::from_secs(1));
 
     let mut command_line = CommandLine::new();
     command_line.set_name("touch");
@@ -66,6 +68,7 @@ use crate::parser::commands::Commands;
       Err(e) => panic!("{}", e),
     }
     assert!(Path::new("test.txt").exists());
+    thread::sleep(std::time::Duration::from_secs(1));
 
     let mut command_line = CommandLine::new();
     command_line.set_name("touch");
@@ -80,8 +83,8 @@ use crate::parser::commands::Commands;
     let m = FileTime::from_last_modification_time(&meta);
     let a = FileTime::from_last_access_time(&meta);
 
-    assert_eq!(m.seconds(), FileTime::now().seconds());
-    assert_eq!(a.seconds(), FileTime::now().seconds());
+    assert_eq!(m.unix_seconds(), FileTime::now().unix_seconds());
+    assert_ne!(a.unix_seconds(), FileTime::now().unix_seconds());
     fs::remove_file("test.txt").unwrap();
   }
 }

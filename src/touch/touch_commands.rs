@@ -3,8 +3,8 @@ use crate::parser::commands::Commands;
 
 pub struct TouchCommands {
     command_line: CommandLine,
-    acsesss_time_update: bool,
-    modification_time_udpate: bool,
+    access_time_update: bool,
+    modification_time_update: bool,
     is_date_time: bool,
     reference_time: bool,
 }
@@ -13,16 +13,16 @@ impl TouchCommands {
     pub fn new(command_line: CommandLine) -> TouchCommands {
         let mut command = TouchCommands {
             command_line: command_line,
-            acsesss_time_update : false,
-            modification_time_udpate: false,
+            access_time_update : false,
+            modification_time_update: false,
             is_date_time: false,
             reference_time: false,
         };
 
         for flag in command.command_line.get_options().iter() {
             match flag.as_str() {
-                "-a" => command.acsesss_time_update = true,
-                "-m" => command.modification_time_udpate = true,
+                "-a" => command.access_time_update = true,
+                "-m" => command.modification_time_update = true,
                 "-d" => command.is_date_time = true,
                 "-r" => command.reference_time = true,
                 _ => (),
@@ -32,12 +32,12 @@ impl TouchCommands {
         return command;
     }
 
-    pub(crate) fn get_acsesss_time_update(&self) -> bool {
-        return self.acsesss_time_update;
+    pub(crate) fn get_access_time_update(&self) -> bool {
+        return self.access_time_update;
     }
 
-    pub(crate) fn get_modification_time_udpate(&self) -> bool {
-        return self.modification_time_udpate;
+    pub(crate) fn get_modification_time_update(&self) -> bool {
+        return self.modification_time_update;
     }
 }
 
@@ -65,7 +65,6 @@ impl Commands for TouchCommands {
             if self.print_version(options, &args[0]) {
                 return Ok(());
             };
-
             self.timestamp_update(&args[0])?;
             return Ok(());
         } else if args.len() == 2 && self.is_date_time {
@@ -74,6 +73,6 @@ impl Commands for TouchCommands {
           self.reference_time(args.to_vec())?;
         }
 
-        return Ok(());
+        return Err(String::from("gtouch: missing operand"));
     }
 }
