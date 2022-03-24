@@ -13,7 +13,7 @@ impl TouchCommands {
     pub fn new(command_line: CommandLine) -> TouchCommands {
         let mut command = TouchCommands {
             command_line: command_line,
-            access_time_update : false,
+            access_time_update: false,
             modification_time_update: false,
             is_date_time: false,
             reference_time: false,
@@ -68,9 +68,11 @@ impl Commands for TouchCommands {
             self.timestamp_update(&args[0])?;
             return Ok(());
         } else if args.len() == 2 && self.is_date_time {
-          self.set_file_timestamp(&args[1], &args[0])?;
+            self.set_file_timestamp(&args[1], &args[0])?;
+            return Ok(());
         } else if args.len() == 2 && self.reference_time {
-          self.reference_time(args.to_vec())?;
+            self.reference_time(args.to_vec())?;
+            return Ok(());
         }
 
         return Err(String::from("gtouch: missing operand"));

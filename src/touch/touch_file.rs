@@ -1,22 +1,23 @@
+use chrono::DateTime;
 use std::{fs, path::Path};
-use chrono::{DateTime};
 
 use super::touch_commands;
 use filetime::{set_file_times, FileTime};
 impl touch_commands::TouchCommands {
     pub(crate) fn timestamp_update<P: AsRef<Path>>(&self, path: P) -> Result<(), String> {
-         if path.as_ref().exists() {
+        let is_now = !self.get_modification_time_update() && !self.get_access_time_update();
+        if path.as_ref().exists() {
             let (modified, accessed) = self.get_file_timestamp(&path)?;
-            let mtime = if !self.get_modification_time_update() {
-                modified
-            } else {
+            let mtime = if is_now || self.get_modification_time_update() {
                 FileTime::now()
+            } else {
+                modified
             };
 
-            let atime = if !self.get_access_time_update() {
-                accessed
-            } else {
+            let atime = if is_now || self.get_access_time_update() {
                 FileTime::now()
+            } else {
+                accessed
             };
 
             set_file_times(&path, atime, mtime).ok().ok_or(format!(
@@ -49,25 +50,55 @@ impl touch_commands::TouchCommands {
         return Ok(());
     }
 
-    pub(crate) fn set_file_timestamp<P:AsRef<Path>>(&self, path: P, timestamp: &str) -> Result<(), String> {
-      let date = DateTime::parse_from_rfc3339(timestamp).ok().ok_or("gtouch:data time prse error")?;
-      let mtime = FileTime::from_unix_time(date.timestamp(), 0);
-      let atime = FileTime::from_unix_time(date.timestamp(), 0);
-      set_file_times(&path, atime, mtime).ok().ok_or(format!(
-          "gtouch: {}: cannot set timestamp",
-          &path.as_ref().display()
-      ))?;
-      return Ok(());
+    pub(crate) fn set_file_timestamp<P: AsRef<Path>>(
+        &self,
+        path: P,
+        timestamp: &str,
+    ) -> Result<(), String> {
+        let date = DateTime::parse_from_rfc3339(timestamp)
+            .ok()
+            .ok_or("gtouch:data time prse error")?;
+        let is_now = self.get_access_time_update() && self.get_modification_time_update();
+        let meta = fs::metadata(&path).ok().ok_or(format!(
+            "gtouch: {}: cannot get metadata",
+            &path.as_ref().display()
+        ))?;
+        let mtime = if is_now || self.get_modification_time_update() {
+            FileTime::from_unix_time(date.timestamp(), 0)
+        } else {
+            FileTime::from_last_modification_time(&meta)
+        };
+
+        let atime = if is_now || self.get_access_time_update() {
+            FileTime::from_unix_time(date.timestamp(), 0)
+        } else {
+            FileTime::from_last_access_time(&meta)
+        };
+
+        set_file_times(&path, atime, mtime).ok().ok_or(format!(
+            "gtouch: {}: cannot set timestamp",
+            &path.as_ref().display()
+        ))?;
+        return Ok(());
     }
 
     fn get_file_timestamp<P: AsRef<Path>>(&self, path: P) -> Result<(FileTime, FileTime), String> {
         let path = path.as_ref();
+        let is_now = self.get_access_time_update() && self.get_modification_time_update();
         let metadata = fs::metadata(path).ok().ok_or(format!(
             "gtouch: {}: No such file or directory",
             path.display()
         ))?;
-        let modified = FileTime::from_last_modification_time(&metadata);
-        let accessed = FileTime::from_last_access_time(&metadata);
+        let modified = if is_now || self.get_modification_time_update() {
+            FileTime::from_last_modification_time(&metadata)
+        } else {
+            FileTime::from_last_modification_time(&metadata)
+        };
+        let accessed = if is_now || self.get_modification_time_update() {
+            FileTime::from_last_access_time(&metadata)
+        } else {
+            FileTime::from_last_access_time(&metadata)
+        };
         return Ok((modified, accessed));
     }
 }
