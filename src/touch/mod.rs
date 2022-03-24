@@ -3,11 +3,13 @@ pub mod touch_file;
 
 #[cfg(test)]
 pub mod tests {
-  use crate::parser::commands::Commands;
+  use filetime::FileTime;
+
+use crate::parser::commands::Commands;
   use crate::parser::command_line::CommandLine;
   use crate::touch::touch_commands::TouchCommands;
+  use std::path::Path;
   use std::fs;
-use std::path::Path;
 
   #[test]
   fn touch_crete_file() {
@@ -21,6 +23,65 @@ use std::path::Path;
       Err(e) => panic!("{}", e),
     }
     assert!(Path::new("test.txt").exists());
+    fs::remove_file("test.txt").unwrap();
+  }
+
+  #[test]
+  fn touch_file() {
+    let mut command_line = CommandLine::new();
+    command_line.set_name("touch");
+    command_line.set_args(vec!["test.txt".into()]);
+    let touch_commands = TouchCommands::new(command_line);
+    match touch_commands.run() {
+      Ok(_) => {}
+      Err(e) => panic!("{}", e),
+    }
+    assert!(Path::new("test.txt").exists());
+
+    let mut command_line = CommandLine::new();
+    command_line.set_name("touch");
+    command_line.set_args(vec!["test.txt".into()]);
+    let touch_commands = TouchCommands::new(command_line);
+    match touch_commands.run() {
+      Ok(_) => {}
+      Err(e) => panic!("{}", e),
+    }
+    let meta = fs::metadata("test.txt").unwrap();
+    let m = FileTime::from_last_modification_time(&meta);
+    let a = FileTime::from_last_access_time(&meta);
+
+    assert_eq!(m.seconds(), FileTime::now().seconds());
+    assert_eq!(a.seconds(), FileTime::now().seconds());
+    fs::remove_file("test.txt").unwrap();
+  }
+
+  #[test]
+  fn touch_file_modification() {
+    let mut command_line = CommandLine::new();
+    command_line.set_name("touch");
+    command_line.set_args(vec!["test.txt".into()]);
+    let touch_commands = TouchCommands::new(command_line);
+    match touch_commands.run() {
+      Ok(_) => {}
+      Err(e) => panic!("{}", e),
+    }
+    assert!(Path::new("test.txt").exists());
+
+    let mut command_line = CommandLine::new();
+    command_line.set_name("touch");
+    command_line.set_args(vec!["test.txt".into()]);
+    command_line.set_options(vec!["-m".into()]);
+    let touch_commands = TouchCommands::new(command_line);
+    match touch_commands.run() {
+      Ok(_) => {}
+      Err(e) => panic!("{}", e),
+    }
+    let meta = fs::metadata("test.txt").unwrap();
+    let m = FileTime::from_last_modification_time(&meta);
+    let a = FileTime::from_last_access_time(&meta);
+
+    assert_eq!(m.seconds(), FileTime::now().seconds());
+    assert_eq!(a.seconds(), FileTime::now().seconds());
     fs::remove_file("test.txt").unwrap();
   }
 }
