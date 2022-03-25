@@ -43,7 +43,7 @@ impl commands::Commands for PsCommands {
             println!("Try 'gps --help' for more information.");
             return Ok(());
         }
-
+        self.processes_display()?;
         return Ok(());
     }
 }
