@@ -8,7 +8,7 @@ impl ps_commands::PsCommands {
 
         println!("{: >5} {: <8} {: >8} {}", "PID", "TTY", "TIME", "CMD");
 
-        let tty = format!("pty/{}", me.stat.tty_nr().1);
+        let tty = format!("pts/{}", me.stat.tty_nr().1);
         for prc in process::all_processes()
             .ok()
             .ok_or("Failed to get processes")?

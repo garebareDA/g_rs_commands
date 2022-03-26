@@ -6,9 +6,9 @@ pub struct PsCommands {
 }
 
 impl PsCommands {
-    pub fn new() -> PsCommands {
+    pub fn new(command_line: CommandLine) -> PsCommands {
         let commands = PsCommands {
-            command_line: CommandLine::new(),
+            command_line,
         };
 
         return commands;
