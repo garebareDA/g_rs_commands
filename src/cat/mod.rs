@@ -3,10 +3,10 @@ pub mod gcat_file;
 
 #[cfg(test)]
 mod tests {
-  use super::gcat_commands;
-  use std::fs::File;
-  use crate::parser::commands::Commands;
-  use crate::parser::command_line::CommandLine;
+    use super::gcat_commands;
+    use crate::parser::command_line::CommandLine;
+    use crate::parser::commands::Commands;
+    use std::fs::File;
     #[test]
     fn cat_command() {
         let mut command_line = CommandLine::new();

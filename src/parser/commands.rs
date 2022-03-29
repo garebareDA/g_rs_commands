@@ -3,8 +3,9 @@ pub trait Commands {
   fn version(&self);
   fn name(&self) -> &str;
   fn run(&self) -> Result<(), String>;
-  fn print_help(&self, options: &Vec<String>, arg: &str) -> bool{
+  fn print_version(&self, options: &Vec<String>, arg: &str) -> bool{
     if options.contains(&"--version".to_string())
+      || options.contains(&"-version".to_string())
       || options.contains(&"-v".to_string())
       || arg == "version"
     {
@@ -13,8 +14,9 @@ pub trait Commands {
     }
     false
   }
-  fn print_version(&self, options: &Vec<String>, arg: &str) -> bool {
+  fn print_help(&self, options: &Vec<String>, arg: &str) -> bool {
     if options.contains(&"--help".to_string())
+      || options.contains(&"-help".to_string())
       || options.contains(&"-h".to_string())
       || arg == "help"
     {

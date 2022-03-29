@@ -4,8 +4,8 @@ mod ls_file;
 #[cfg(test)]
 mod tests {
     use super::ls_commands;
-    use crate::parser::commands::Commands;
     use crate::parser::command_line::CommandLine;
+    use crate::parser::commands::Commands;
 
     #[test]
     fn ls_run() {
