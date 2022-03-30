@@ -41,6 +41,7 @@ impl commands::Commands for PsCommands {
         println!("");
         println!("  -o, --sort=STRING   sort by STRING");
         println!("  -r, --reverse       reverse order while sorting");
+        println!("  -a, --all           show all processes, even those that are stopped");
         println!("  -v, --version       print version information and exit");
         println!("  -h, --help          display this help and exit");
     }

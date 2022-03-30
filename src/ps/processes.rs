@@ -14,17 +14,18 @@ impl ps_commands::PsCommands {
             .ok_or("Failed to get processes")?
             .iter()
         {
+            let total_time = (prc.stat.utime + prc.stat.stime) as f32 / (tps as f32);
             if self.get_is_show_all() {
-                let total_time = (prc.stat.utime + prc.stat.stime) as f32 / (tps as f32);
-                println!(
-                    "{: >5} {: <8} {: >8} {}",
-                    prc.stat.pid, tty, total_time, prc.stat.comm
-                );
+                if prc.stat.tty_nr().0 != 0 {
+                    println!(
+                        "{: >5} pts/{: <8} {: >8} {}",
+                        prc.stat.pid, prc.stat.tty_nr().1, total_time, prc.stat.comm
+                    );
+                }
                 continue;
             }
 
             if prc.stat.tty_nr == me.stat.tty_nr {
-                let total_time = (prc.stat.utime + prc.stat.stime) as f32 / (tps as f32);
                 println!(
                     "{: >5} {: <8} {: >8} {}",
                     prc.stat.pid, tty, total_time, prc.stat.comm
