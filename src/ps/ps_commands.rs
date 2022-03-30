@@ -19,7 +19,18 @@ impl PsCommands {
             }
         }
 
+        for flag in commands.command_line.get_options().iter() {
+            match flag.as_str() {
+                "-a" => commands.is_show_all = true,
+                _ => (),
+            }
+        }
+
         return commands;
+    }
+
+    pub fn get_is_show_all(&self) -> bool {
+        return self.is_show_all;
     }
 }
 
