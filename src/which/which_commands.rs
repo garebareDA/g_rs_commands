@@ -13,13 +13,6 @@ impl WhichCommands {
             is_all: false,
         };
 
-        for flag in command.command_line.get_options().iter() {
-            match flag.as_str() {
-                "-a" => command.is_all = true,
-                _ => (),
-            }
-        }
-
         return command;
     }
 }
