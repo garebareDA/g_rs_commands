@@ -53,7 +53,10 @@ impl commands::Commands for PsCommands {
         println!("gps: Print a list of processes to stdout.");
         println!("usage: ps [OPTION]...");
         println!("");
-        println!("  -a, --all           show all processes, even those that are stopped");
+        println!("  -x           print not terminal processes");
+        println!("  -a           print terminated processes");
+        println!("  -e           print all processes with their environment.");
+        println!("  -l           print details for each process.");
         println!("  -v, --version       print version information and exit");
         println!("  -h, --help          display this help and exit");
     }
