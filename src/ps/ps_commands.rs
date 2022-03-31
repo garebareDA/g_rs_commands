@@ -3,15 +3,48 @@ use crate::parser::commands;
 
 pub struct PsCommands {
     command_line: CommandLine,
+    is_show_all: bool,
+    is_terminal: bool,
+    is_not_terminal: bool,
+    is_show_details: bool,
 }
 
 impl PsCommands {
     pub fn new(command_line: CommandLine) -> PsCommands {
-        let commands = PsCommands {
+        let mut commands = PsCommands {
             command_line,
+            is_show_all: false,
+            is_terminal: false,
+            is_not_terminal: false,
+            is_show_details: false,
         };
+        for flag in commands.command_line.get_options().iter() {
+            match flag.as_str() {
+                "-e" => commands.is_show_all = true,
+                "-a" => commands.is_terminal = true,
+                "-x" => commands.is_not_terminal = true,
+                "-l" => commands.is_show_details = true,
+                _ => (),
+            }
+        }
 
         return commands;
+    }
+
+    pub fn get_is_show_all(&self) -> bool {
+        return self.is_show_all;
+    }
+
+    pub fn get_is_terminal(&self) -> bool {
+        return self.is_terminal;
+    }
+
+    pub fn get_is_not_terminal(&self) -> bool {
+        return self.is_not_terminal;
+    }
+
+    pub fn get_is_show_details(&self) -> bool {
+        return self.is_show_details;
     }
 }
 
@@ -20,8 +53,10 @@ impl commands::Commands for PsCommands {
         println!("gps: Print a list of processes to stdout.");
         println!("usage: ps [OPTION]...");
         println!("");
-        println!("  -o, --sort=STRING   sort by STRING");
-        println!("  -r, --reverse       reverse order while sorting");
+        println!("  -x           print not terminal processes");
+        println!("  -a           print terminated processes");
+        println!("  -e           print all processes with their environment.");
+        println!("  -l           print details for each process.");
         println!("  -v, --version       print version information and exit");
         println!("  -h, --help          display this help and exit");
     }
